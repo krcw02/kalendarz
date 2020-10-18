@@ -9,7 +9,7 @@ var con = mysql.createConnection({
   });
 con.connect(function(err) {
     if (err) throw err;
-    con.query('SELECT * FROM przedmioty WHERE data="2020-10-03"', function (err, result, fields) {
+    con.query(`UPDATE przedmioty SET opis="XD" WHERE id=4`, function (err, result, fields) {
       if (err) throw err;
       console.log(result);
     });

@@ -11,7 +11,7 @@ server.listen(port);
 const wws = new WebSocketServer({ server: server })
 app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, '/public')));
-
+let haslo = "Apex";
 var con = mysql.createConnection({
     host: "localhost",
     user: "admin",
@@ -40,21 +40,47 @@ wws.on("connection", ws => {
         }
 
         if (data.type == "data") {
-           
+
             con.query(`SELECT * FROM przedmioty WHERE data="${data.data}"`, function (err, result, fields) {
                 if (err) throw err;
                 ws.send(JSON.stringify(result));
 
             });
         }
-        else if(data.type == "dodaj"){
+        else if (data.type == "dodaj") {
+            if (data.haslo == haslo) {
+                con.query(`INSERT INTO przedmioty VALUES (NULL, "${data.przedmiot}","${data.data}","${data.wpis}")`, function (err, result, fields) {
+                    if (err) throw err;
+
+                });
+            }
 
         }
-        else if(data.type == "usun"){
+        else if (data.type == "usun") {
+            if (data.haslo == haslo) {
+                con.query(`DELETE FROM przedmioty WHERE id=${data.id}`, function (err, result, fields) {
+                    if (err) throw err;
 
+                });
+
+            }
         }
-        else if(data.type == "edytuj"){
+        else if (data.type == "edytuj") {
+            if (data.haslo == haslo) {
+                if (data.przedmiot != "") {
+                    con.query(`UPDATE przedmioty SET przedmiot="${data.przedmiot}" WHERE id=${data.id}`, function (err, result, fields) {
+                        if (err) throw err;
 
+                    });
+                }
+                if (data.wpis != "") {
+                    con.query(`UPDATE przedmioty SET opis="${data.wpis}" WHERE id=${data.id}`, function (err, result, fields) {
+                        if (err) throw err;
+
+                    });
+                }
+
+            }
         }
 
     });

@@ -72,37 +72,101 @@ function createcal() {
 }
 
 // ZADANIA
-
+let terazdata = "";
+let terazdzien = 0;
 const host = location.origin.replace(/^http/, 'ws')
 const ws = new WebSocket(host);
 let conversation;
-ws.addEventListener("open", e => { pobierz(n.getDate()); })
+ws.addEventListener("open", e => {
+    setTimeout(() => {
+        pobierz(n.getDate());
+    }, 300)
+})
 ws.addEventListener("message", e => {
     conversation = JSON.parse(e.data);
     con(conversation);
 
 });
 
-function edytuj() {
-    var okienko = window.open("", "Edytuj", "width=400,height=600");
-    
+function edytuj(a) {
+    if (a == "a") {
+        document.querySelector(".tresc").innerHTML = `
+        ID zadania: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="number" maxlength="8" class="abc" id="d"><br>
+        Przedmiot:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <input type="text" maxlength="50" class="abc" id="a"><br>
+        Treść zadania: &nbsp&nbsp<input type="text" class="abc" maxlength="200" id="b"><br>
+        Klucz dostępu: &nbsp&nbsp<input type="password" maxlength="8" class="abc" id="c"><br>
+        <div class="but" onclick='edytuj("b")'>Wyślij</div>`
+    } else {
+        console.log("TEST");
+        let przedmiot = document.querySelector("#a").value;
+        let wpis = document.querySelector("#b").value;
+        let haslo = document.querySelector("#c").value;
+        let id = parseInt(document.querySelector("#d").value);
+        let s = {
+            type: "edytuj",
+            przedmiot: przedmiot,
+            wpis: wpis,
+            data: terazdata,
+            id: id,
+            haslo: haslo
+        };
+        console.log(s);
+        ws.send(JSON.stringify(s));
+        setTimeout(() => {
+            pobierz(terazdzien);
+        },300)
+    }
+
 }
-function dodaj() {
-    var przedmiot = prompt("Podaj przedmiot");
-    var wpis = prompt("wpis");
-    if(przedmiot != null && wpis != null){
+function dodaj(a) {
+    if (a == "a") {
+        document.querySelector(".tresc").innerHTML = `
+        Przedmiot:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <input type="text" maxlength="50" class="abc" id="a"><br>
+        Treść zadania: &nbsp&nbsp<input type="text" class="abc" maxlength="200" id="b"><br>
+        Klucz dostępu: &nbsp&nbsp<input type="password" maxlength="8" class="abc" id="c"><br>
+        <div class="but" onclick='dodaj("b")'>Wyślij</div>`
+    } else {
+        let przedmiot = document.querySelector("#a").value;
+        let wpis = document.querySelector("#b").value;
+        let haslo = document.querySelector("#c").value;
         let s = {
             type: "dodaj",
             przedmiot: przedmiot,
-            wpis: wpis
+            wpis: wpis,
+            data: terazdata,
+            haslo: haslo
         };
         ws.send(JSON.stringify(s));
+        setTimeout(() => {
+            pobierz(terazdzien);
+        },300)
     }
-    
+
+
+
+
 }
-function usun() {
-    var okienko = window.open("", "Edytuj", "width=400,height=600");
-    okienko.document.write();
+function usun(a) {
+    if (a == "a") {
+        document.querySelector(".tresc").innerHTML = `
+        ID zadania: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="number" maxlength="8" class="abc" id="d"><br>
+        Klucz dostępu: &nbsp&nbsp<input type="password" maxlength="8" class="abc" id="c"><br>
+        <div class="but" onclick='usun("b")'>Wyślij</div>`
+    } else {
+        console.log("TEST"); 
+        let haslo = document.querySelector("#c").value;
+        let id = parseInt(document.querySelector("#d").value);
+        let s = {
+            type: "usun",
+            id: id,
+            haslo: haslo
+        };
+        console.log(s);
+        ws.send(JSON.stringify(s));
+        setTimeout(() => {
+            pobierz(terazdzien);
+        },300)
+    }
 }
 function pobierz(d) {
     let y = document.querySelector("#year").value;
@@ -110,6 +174,8 @@ function pobierz(d) {
     m++;
     if (m < 10) m = '0' + m;
     if (d < 10) d = '0' + d;
+    terazdata = `${y}-${m}-${d}`;
+    terazdzien = d;
     document.querySelector(".hl").innerHTML = `Zadania ${d}/${m}/${y}`;
     let s = {
         type: "data",
@@ -119,14 +185,13 @@ function pobierz(d) {
 }
 function con(c) {
     let tresc = "";
-    console.log(c);
-    console.log(c.length);
+  
     if (c.length > 0) {
         for (let i = 0; i < c.length; i++) {
-            tresc += `<p><h4>${c[i].przedmiot}</h4>${c[i].opis}</p>`;
+            tresc += `<p><h4>${c[i].przedmiot} #${c[i].id}</h4>${c[i].opis}</p>`;
         }
         document.querySelector(".tresc").innerHTML = tresc;
     } else {
-            document.querySelector(".tresc").innerHTML = "<h4>Brak zadan w tym dniu</h4>";
+        document.querySelector(".tresc").innerHTML = "<h4>Brak zadan w tym dniu</h4>";
     }
 }
