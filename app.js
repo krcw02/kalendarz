@@ -17,7 +17,8 @@ var con = mysql.createConnection({
     user: "admin",
     password: "password",
     database: "test",
-    timezone: 'utc'
+    timezone: 'utc',
+    dateStrings: 'date'
 });
 con.connect(function (err) {
     if (err) throw err;
@@ -25,7 +26,10 @@ con.connect(function (err) {
 });
 
 app.get('/', function (req, res) {
-    res.render('index');
+    res.render('kalendarz');
+})
+app.get('/lista', function (req, res) {
+    res.render('lista');
 })
 
 wws.on("connection", ws => {
@@ -81,6 +85,15 @@ wws.on("connection", ws => {
                 }
 
             }
+        }
+        else if (data.type == "all") {
+                            
+                    con.query(`SELECT * FROM przedmioty WHERE data>=now()-1 ORDER BY data`, function (err, result, fields) {
+                        if (err) throw err;
+                        ws.send(JSON.stringify(result));
+
+                    });
+                
         }
 
     });

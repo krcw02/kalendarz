@@ -61,10 +61,10 @@ function createcal() {
     }
     for (let i = 1; i <= lastday; i++) {
         if (i == n.getDate() && d.getMonth() == n.getMonth() && d.getFullYear() == n.getFullYear())
-            day += `<div class="box d" onclick="pobierz(${i})">${i}</div>`;
+            day += `<div class="box d" id="B${i}" onclick="pobierz(${i})">${i}</div>`;
 
         else
-            day += `<div class="box" onclick="pobierz(${i})">${i}</div>`;
+            day += `<div class="box" id="B${i}" onclick="pobierz(${i})">${i}</div>`;
 
     }
     document.querySelector(".container").innerHTML = day;
@@ -169,6 +169,8 @@ function usun(a) {
     }
 }
 function pobierz(d) {
+    createcal();
+    document.querySelector(`#B${d}`).style.border = "solid 3px white";
     let y = document.querySelector("#year").value;
     let m = document.querySelector("#month").value;
     m++;

@@ -1,0 +1,86 @@
+body{
+    font-family: 'Comfortaa', cursive;
+    background-color:  #161618;
+    color:#ffffff;
+    margin: 0;
+}
+.s1{
+    border-bottom: dotted 1px #c0c0c0;
+    padding-bottom: 25px;
+    margin: 10px;
+}
+.p{
+    float: right;
+    margin-top: -35px;
+    color: #fff;
+}
+.b{
+    display: inline;
+    cursor: pointer;
+    color: #be2e2e;
+    font-size: 0.9em;
+    
+}
+.nav{
+    position: sticky;
+    background-color: #be2e2e;
+    border: 0;
+    padding: 6px;
+    font-size: 25px;
+
+}
+.form{
+    margin-left: auto;
+    margin-right: auto;
+    width: 250px;
+    padding: 100px 10px;
+}
+.but{
+    border: 1px solid #fff;
+    cursor: pointer;
+    display: inline-block;
+    padding: 5px;
+    width: 258px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    text-align: center;
+    
+}
+
+.abc{
+    color: #fff;
+    background-color: transparent;
+  width: 250px;
+  height: 24px;
+  font-size: 20px;
+}
+.logo{
+    display: inline;
+}
+.plus{
+    display: inline;
+    float: right;
+    box-sizing: border-box;
+    margin-right: 5px;
+    font-size: 32px;
+    cursor: pointer;
+}
+h3 {
+    color: #fff;
+}
+p{
+    color:#c0c0c0
+}
+.ll{
+    position: absolute;
+    right: 30px;
+    bottom: 30px;
+    background-color: #be2e2e;
+    border-radius: 100px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
